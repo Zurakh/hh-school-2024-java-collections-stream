@@ -20,16 +20,21 @@ public class Task6 {
   public static Set<String> getPersonDescriptions(Collection<Person> persons,
                                                   Map<Integer, Set<Integer>> personAreaIds,
                                                   Collection<Area> areas) {
+    // вынес склейку в отдельный метод
 
-    Map<Integer, String> areaIdsNames = areas.stream().collect(Collectors.toMap(Area::getId, Area::getName));
+    Map<Integer, Area> areaById = areas.stream().collect(Collectors.toMap(Area::getId, area -> area));
 
     return persons
             .stream()
             .flatMap(person -> personAreaIds
                     .get(person.id())
                     .stream()
-                    .map(areaIdsNames::get)
-                    .map(regionName -> person.firstName() + " - " + regionName))
+                    .map(areaById::get)
+                    .map(area -> getFirstNameDashRegionView(person, area)))
             .collect(Collectors.toSet());
+  }
+
+  private static String getFirstNameDashRegionView (Person person, Area area) {
+    return person.firstName() + " - " + area.getName();
   }
 }

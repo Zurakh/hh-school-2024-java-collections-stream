@@ -22,9 +22,10 @@ public class Task5 {
   }
 
   public List<ApiPersonDto> convert(List<Person> persons, Map<Integer, Integer> personAreaIds) {
+    // Без лишней конвертации
     return persons.stream()
-            .map(personConverter::convert)
-            .map(personDto -> personDto.setAreaId(personAreaIds.get(Integer.valueOf(personDto.getId()))))
+            .map(person ->
+                    personConverter.convert(person, personAreaIds.get(person.id())))
             .toList();
   }
 }
